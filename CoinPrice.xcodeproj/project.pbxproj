@@ -13,6 +13,7 @@
 		98D1AA5021FF3B50001B2318 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98D1AA4F21FF3B50001B2318 /* Assets.xcassets */; };
 		98D1AA5321FF3B50001B2318 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98D1AA5121FF3B50001B2318 /* LaunchScreen.storyboard */; };
 		98D1AA5E21FF3B50001B2318 /* CoinPriceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D1AA5D21FF3B50001B2318 /* CoinPriceUITests.swift */; };
+		98D1AA6921FF3CC8001B2318 /* CoinPriceMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D1AA6821FF3CC8001B2318 /* CoinPriceMainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		98D1AA5921FF3B50001B2318 /* CoinPriceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoinPriceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98D1AA5D21FF3B50001B2318 /* CoinPriceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinPriceUITests.swift; sourceTree = "<group>"; };
 		98D1AA5F21FF3B50001B2318 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		98D1AA6821FF3CC8001B2318 /* CoinPriceMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinPriceMainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				98D1AA4821FF3B50001B2318 /* AppDelegate.swift */,
 				98D1AA4A21FF3B50001B2318 /* ViewController.swift */,
+				98D1AA6821FF3CC8001B2318 /* CoinPriceMainView.swift */,
 				98D1AA4C21FF3B50001B2318 /* Main.storyboard */,
 				98D1AA4F21FF3B50001B2318 /* Assets.xcassets */,
 				98D1AA5121FF3B50001B2318 /* LaunchScreen.storyboard */,
@@ -199,6 +202,7 @@
 			files = (
 				98D1AA4B21FF3B50001B2318 /* ViewController.swift in Sources */,
 				98D1AA4921FF3B50001B2318 /* AppDelegate.swift in Sources */,
+				98D1AA6921FF3CC8001B2318 /* CoinPriceMainView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
