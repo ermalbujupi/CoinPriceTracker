@@ -62,7 +62,7 @@ class CoinPriceMainView: UIView {
         
         coinControl.translatesAutoresizingMaskIntoConstraints = false
         coinControl.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        coinControl.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: -20)
+        coinControl.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 80).isActive = true
         
         currencyPicker.translatesAutoresizingMaskIntoConstraints = false
         currencyPicker.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
