@@ -10,18 +10,20 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CoinPriceMainViewDelegate {
 
     let bitcoinBaseURL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC"
     let etherBaseURL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/ETH"
 
-    let currencyArray = ["AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
-    let currencySymbolArray = ["$", "R$", "$", "¥", "€", "£", "$", "Rp", "₪", "₹", "¥", "$", "kr", "$", "zł", "lei", "₽", "kr", "$", "$", "R"]
+    let currencyArray = ["Select currency","AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
+    let currencySymbolArray = ["","$", "R$", "$", "¥", "€", "£", "$", "Rp", "₪", "₹", "¥", "$", "kr", "$", "zł", "lei", "₽", "kr", "$", "$", "R"]
     var bitcoinFinalURL = ""
     var etherFinalURL = ""
     var currentSymbol = ""
-
+    var currentRow = 0
+    
     var mainView: CoinPriceMainView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,7 @@ class ViewController: UIViewController {
         mainView = CoinPriceMainView(frame: CGRect.zero)
         self.view.addSubview(mainView)
         
+        mainView.delegate = self
         mainView.currencyPicker.delegate = self
         mainView.currencyPicker.dataSource = self
         
@@ -48,9 +51,36 @@ class ViewController: UIViewController {
         }
     }
     
+    private func getEtherPrice(url: String) {
+        Alamofire.request(url, method: .get).responseJSON { (response) in
+            if response.result.isSuccess {
+                let etherJSON = JSON(response.result.value!)
+                self.updatePrice(json: etherJSON)
+                print(etherJSON)
+            } else {
+                print("Error: \(String(describing: response.result.error))")
+                self.mainView.price = "Connection Issues"
+            }
+        }
+    }
+    
     private func updatePrice(json: JSON) {
         if let price = json["open"]["day"].double {
             self.mainView.price = currentSymbol + "\(price)"
+        }
+    }
+    
+    func changedSegmentValue(_ priceMainView: CoinPriceMainView, _ sender: UISegmentedControl) {
+        guard currentRow > 0 else {
+            return
+        }
+        currentSymbol = currencySymbolArray[currentRow]
+        if mainView.coinControl.selectedSegmentIndex == 0 {
+            bitcoinFinalURL = bitcoinBaseURL + currencyArray[currentRow]
+            getBitcoinPrice(url: bitcoinFinalURL)
+        } else {
+            etherFinalURL = etherBaseURL + currencyArray[currentRow]
+            getEtherPrice(url: etherFinalURL)
         }
     }
     
@@ -83,9 +113,18 @@ extension ViewController: UIPickerViewDataSource {
 extension ViewController: UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        bitcoinFinalURL = bitcoinBaseURL + currencyArray[row]
-        currentSymbol = currencySymbolArray[row]
-        getBitcoinPrice(url: bitcoinFinalURL)
+        currentRow = row
+        guard currentRow > 0 else {
+            return
+        }
+        currentSymbol = currencySymbolArray[currentRow]
+        if mainView.coinControl.selectedSegmentIndex == 0 {
+            bitcoinFinalURL = bitcoinBaseURL + currencyArray[currentRow]
+            getBitcoinPrice(url: bitcoinFinalURL)
+        } else {
+            etherFinalURL = etherBaseURL + currencyArray[currentRow]
+            getEtherPrice(url: etherFinalURL)
+        }
     }
     
 }

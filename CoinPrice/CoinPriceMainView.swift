@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol CoinPriceMainViewDelegate {
+    func changedSegmentValue(_ priceMainView: CoinPriceMainView, _ sender: UISegmentedControl)
+}
+
 class CoinPriceMainView: UIView {
 
     var price: String = "Price" {
@@ -15,7 +19,8 @@ class CoinPriceMainView: UIView {
             priceLabel.text = price
         }
     }
-    
+
+    var delegate: CoinPriceMainViewDelegate?
     private var coinLogo: UIImageView!
     private var priceLabel: UILabel!
     
@@ -43,12 +48,17 @@ class CoinPriceMainView: UIView {
         coinControl.backgroundColor = UIColor(red:1.00, green:0.78, blue:0.00, alpha:1.0)
         coinControl.tintColor = .white
         coinControl.selectedSegmentIndex = 0
+        coinControl.addTarget(self, action: #selector(didTapCoinControl), for: .valueChanged)
         self.addSubview(coinControl)
         
         currencyPicker = UIPickerView()
         self.addSubview(currencyPicker)
         
         setupConstraints()
+    }
+    
+    @objc private func didTapCoinControl(_ sender: UISegmentedControl) {
+        delegate?.changedSegmentValue(self, sender)
     }
     
     private func setupConstraints() {
@@ -62,6 +72,7 @@ class CoinPriceMainView: UIView {
         
         coinControl.translatesAutoresizingMaskIntoConstraints = false
         coinControl.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        coinControl.heightAnchor.constraint(equalToConstant: 35).isActive = true
         coinControl.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 80).isActive = true
         
         currencyPicker.translatesAutoresizingMaskIntoConstraints = false
