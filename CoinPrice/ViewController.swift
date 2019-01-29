@@ -14,11 +14,15 @@ class ViewController: UIViewController, CoinPriceMainViewDelegate {
 
     let bitcoinBaseURL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC"
     let etherBaseURL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/ETH"
+    let rippleBaseURL = "https://apiv2.bitcoinaverage.com/indices/global/ticker/XRP"
 
     let currencyArray = ["Select currency","AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
     let currencySymbolArray = ["","$", "R$", "$", "¥", "€", "£", "$", "Rp", "₪", "₹", "¥", "$", "kr", "$", "zł", "lei", "₽", "kr", "$", "$", "R"]
+    
     var bitcoinFinalURL = ""
     var etherFinalURL = ""
+    var rippleFinalURL = ""
+    
     var currentSymbol = ""
     var currentRow = 0
     
@@ -63,6 +67,19 @@ class ViewController: UIViewController, CoinPriceMainViewDelegate {
             }
         }
     }
+
+    private func getRipplePrice(url: String) {
+        Alamofire.request(url, method: .get).responseJSON { (response) in
+            if response.result.isSuccess {
+                let rippleJSON = JSON(response.result.value!)
+                self.updatePrice(json: rippleJSON)
+                print(rippleJSON)
+            } else {
+                print("Error: \(String(describing: response.result.error))")
+                self.mainView.price = "Connection Issues"
+            }
+        }
+    }
     
     private func updatePrice(json: JSON) {
         if let price = json["open"]["day"].double {
@@ -75,12 +92,19 @@ class ViewController: UIViewController, CoinPriceMainViewDelegate {
             return
         }
         currentSymbol = currencySymbolArray[currentRow]
-        if mainView.coinControl.selectedSegmentIndex == 0 {
+        
+        switch mainView.coinControl.selectedSegmentIndex {
+        case 0:
             bitcoinFinalURL = bitcoinBaseURL + currencyArray[currentRow]
             getBitcoinPrice(url: bitcoinFinalURL)
-        } else {
+        case 1:
             etherFinalURL = etherBaseURL + currencyArray[currentRow]
             getEtherPrice(url: etherFinalURL)
+        case 2:
+            rippleFinalURL = rippleBaseURL + currencyArray[currentRow]
+            getRipplePrice(url: rippleFinalURL)
+        default:
+            return
         }
     }
     
@@ -114,16 +138,24 @@ extension ViewController: UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         currentRow = row
+        
         guard currentRow > 0 else {
             return
         }
         currentSymbol = currencySymbolArray[currentRow]
-        if mainView.coinControl.selectedSegmentIndex == 0 {
+     
+        switch mainView.coinControl.selectedSegmentIndex {
+        case 0:
             bitcoinFinalURL = bitcoinBaseURL + currencyArray[currentRow]
             getBitcoinPrice(url: bitcoinFinalURL)
-        } else {
+        case 1:
             etherFinalURL = etherBaseURL + currencyArray[currentRow]
             getEtherPrice(url: etherFinalURL)
+        case 2:
+            rippleFinalURL = rippleBaseURL + currencyArray[currentRow]
+            getRipplePrice(url: rippleFinalURL)
+        default:
+            return
         }
     }
     

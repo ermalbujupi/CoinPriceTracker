@@ -45,6 +45,7 @@ class CoinPriceMainView: UIView {
         coinControl = UISegmentedControl()
         coinControl.insertSegment(withTitle: "Bitcoin", at: 0, animated: true)
         coinControl.insertSegment(withTitle: "Etherum", at: 1, animated: true)
+        coinControl.insertSegment(withTitle: "Ripple", at: 2, animated: true)
         coinControl.backgroundColor = UIColor(red:1.00, green:0.78, blue:0.00, alpha:1.0)
         coinControl.tintColor = .white
         coinControl.selectedSegmentIndex = 0
